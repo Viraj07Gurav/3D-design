@@ -216,6 +216,7 @@ function GridContainer() {
       setUsername(name);
       localStorage.setItem('username', name); // Save the username in localStorage
       setShowModal(false); // Close the modal after username is submitted
+      window.location.reload();
     };
     return (
         <div>

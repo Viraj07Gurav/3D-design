@@ -14,8 +14,8 @@ function UsernameModal({ onSubmit }) {
   };
 
   return (
-    <div className="modal border w-fit text-center rounded p-1 border-amber-300 mx-auto animate-border bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-[length:400%_400%] ">
-      <div className="modal-content bg-amber-300 rounded outline-none">
+    <div className="modal border w-fit text-center rounded p-1 border-amber-300 mx-auto animate-border bg-gradient-to-r from-yello-700 via-yellow-200 to-yellow-700 bg-[length:400%_400%] ">
+      <div className="modal-content  rounded outline-none">
         <label className='text-white'>Please enter your username:</label><br />
         <input
           type="text"
