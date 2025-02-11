@@ -10,6 +10,7 @@ import Reward from './Component/Reward'
 import Buttons from './Component/Buttons'
 import BtnContainer from './Component/BtnContainer'
 import LuckyFruits from './Component/LuckyFruits'
+import FruitScroller from './Component/FruitScroller'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -28,6 +29,7 @@ function App() {
          <Reward/>
          <Footer/> */}
          <LuckyFruits/>
+         {/* <FruitScroller/> */}
          </div>
       
        </div>

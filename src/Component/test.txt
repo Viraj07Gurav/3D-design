@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const fruits = ["🍇", "🍏"];
+const fruits = ["🍇", "🍏", "🍊", "🍒", "🍋", "🍉", "🍍", "🍓", "🍈"];
 
 function GridComponent() {
     const [slots, setSlots] = useState(
@@ -8,14 +8,14 @@ function GridComponent() {
     );
     const [isSpinning, setIsSpinning] = useState(false);
     const [message, setMessage] = useState('');
-    const intervalRef = useRef(null);
-    const timeoutRef = useRef(null);
 
     const startSpin = () => {
+        if (isSpinning) return;
+
         setIsSpinning(true);
         setMessage('');
 
-        intervalRef.current = setInterval(() => {
+        const interval = setInterval(() => {
             setSlots(
                 Array(3).fill().map(() => [
                     fruits[Math.floor(Math.random() * fruits.length)],
@@ -25,21 +25,10 @@ function GridComponent() {
             );
         }, 100);
 
-        timeoutRef.current = setTimeout(() => {
-            stopSpin(); // Automatically stop after 10 seconds
-            setMessage('Try again! ❌');
-        }, 10000); // 10-second timer
-    };
-
-    const stopSpin = () => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current); // Stop the spinning immediately
-        }
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current); // Clear the timeout if the user stops early
-        }
-        setIsSpinning(false); // Disable the spinning state
-        checkWin(); // Check if the user wins
+        setTimeout(() => {
+            clearInterval(interval);
+            setIsSpinning(false);
+        }, 3000);
     };
 
     // useEffect to check the win condition after slots state updates
@@ -59,7 +48,7 @@ function GridComponent() {
     };
 
     return (
-        <div  className="p-5 w-65 text-center">
+        <div className="p-5 text-center">
             <div className="flex justify-center gap-5 bg-gray-200 p-4 rounded-md">
                 {slots.map((column, index) => (
                     <div key={index} className="flex flex-col items-center border p-2 w-16 h-32 text-2xl bg-white rounded-md">
@@ -70,10 +59,11 @@ function GridComponent() {
                 ))}
             </div>
             <button 
-                onClick={isSpinning ? stopSpin : startSpin} 
+                onClick={startSpin} 
                 className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                disabled={isSpinning}
             >
-                {isSpinning ? 'Stop Spin' : 'Start Spin'}
+                {isSpinning ? 'Spinning...' : 'Start Spin'}
             </button>
             <p className="mt-4 text-xl font-bold">{message}</p>
         </div>

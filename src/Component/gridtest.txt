@@ -1,0 +1,183 @@
+import React, { useState,useRef,useEffect } from 'react';
+import orange from '../assets/orange.png';
+import oranges from '../assets/oranges.png';
+import grape from '../assets/grape.png';
+import grapes from '../assets/grapes.png';
+import cherry from '../assets/cherries.png';
+import watermelon from '../assets/watermel.png';
+import mango from '../assets/mango.png';
+import strawberry from '../assets/strawberry.png';
+import Button from './BtnContainer';
+import FruitScroller from './FruitScroller';
+import Reward from './Reward';
+
+const fruits = ["🍇", "🍏"];
+
+function GridContainer() {
+    const [selectedAmount, setSelectedAmount] = useState(null); // Stores the selected amount
+    const [timer, setTimer] = useState(7); // Initial timer value is 7 seconds
+    const [selectedIndex, setSelectedIndex] = useState(null); // Stores the currently selected index
+    const [winningAmount, setWinningAmount] = useState(0); // Stores the winning amount
+    const gridItems = [oranges, oranges, grapes, cherry, null, watermelon, watermelon, mango, strawberry]; // List of grid items
+
+     const [slots, setSlots] = useState(
+            Array(3).fill().map(() => [fruits[0], fruits[1], fruits[2]])
+        );
+        const [isSpinning, setIsSpinning] = useState(false);
+        const [message, setMessage] = useState('');
+        const intervalRef = useRef(null);
+        const timeoutRef = useRef(null);
+    
+
+    const startLoop = (amount) => {
+        setTimer(7); // Reset the timer to 7 seconds
+        setSelectedIndex(null); // Reset the selected index
+        setWinningAmount(0); // Reset winning amount
+
+        // Start the countdown timer
+        const timerInterval = setInterval(() => {
+            setTimer((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timerInterval); // Stop the timer once it reaches 0
+                    setWinningAmount(amount); // Set the winning amount to selected amount
+                    return 0;
+                }
+                return prev - 1; // Decrease timer
+            });
+        }, 1000); // Countdown every 1 second
+
+        // Start the loop selection
+      
+
+        // Stop the loop when the timer reaches 0
+        setTimeout(() => {
+            clearInterval(loopInterval); // Stop loop after 7 seconds (same duration as the timer)
+        }, 7000); // Stop loop after 7 seconds
+    };
+    // Array of fruit emojis (9 options)
+       const startSpin = () => {
+           setIsSpinning(true);
+           setMessage('');
+           setTimer();
+           setSelectedAmount();
+   
+           intervalRef.current = setInterval(() => {
+               setSlots(
+                   Array(3).fill().map(() => [
+                       fruits[Math.floor(Math.random() * fruits.length)],
+                       fruits[Math.floor(Math.random() * fruits.length)],
+                       fruits[Math.floor(Math.random() * fruits.length)]
+                   ])
+               );
+           }, 100);
+   
+           timeoutRef.current = setTimeout(() => {
+               stopSpin(); // Automatically stop after 10 seconds
+               setMessage('Try again! ❌');
+           }, 10000); // 10-second timer
+       };
+   
+       const stopSpin = () => {
+           if (intervalRef.current) {
+               clearInterval(intervalRef.current); // Stop the spinning immediately
+           }
+           if (timeoutRef.current) {
+               clearTimeout(timeoutRef.current); // Clear the timeout if the user stops early
+           }
+           setIsSpinning(false); // Disable the spinning state
+           checkWin(); // Check if the user wins
+       };
+   
+       // useEffect to check the win condition after slots state updates
+       useEffect(() => {
+           if (!isSpinning) {
+               checkWin();
+           }
+       }, [slots, isSpinning]);
+   
+       const checkWin = () => {
+           // Check if all the middle fruits of the 3 columns are the same
+           if (slots[0][1] === slots[1][1] && slots[1][1] === slots[2][1]) {
+               setMessage('You won! 🎉');
+           } else {
+               setMessage('Try again! ❌');
+           }
+       };
+   
+    
+
+   
+   
+    return (
+        <div>
+            <div className='p-3 w-72 mx-auto bg-[#535344] rounded-t-xl'>
+                <div className='flex justify-between align-middle w-60 border p-2 mx-auto'>
+                    <div className='h-4 w-4 rounded-full border bg-gradient(gray 40%, white 10%, gray 40%)' style={{ background: 'linear-gradient(gray 35%, white 50%, gray 35%)' }}>
+
+                    </div>
+                    <p>Lottery Time : {timer}s</p>
+                    <div className='h-4 w-4 rounded-full border ' style={{ background: 'linear-gradient(gray 35%, white 50%, gray 35%)' }}>
+
+                    </div>
+                </div>
+                <div className='rounded-xl w-60 mx-auto  bg-[#8a7353]'>
+                    {/* <FruitScroller/> */}
+                    <div  className="p-5 w-60 text-center">
+            <div className="flex justify-center gap-4 p-1 rounded-md">
+                {slots.map((column, index) => (
+                    <div key={index} className="flex flex-col items-center border p-2 gap-2 w-16 h-32 text-2xl bg-white rounded-md">
+                        <div>{column[0]}</div>
+                        <div className="border-2 border-red-500 px-2">{column[1]}</div>
+                        <div>{column[2]}</div>
+                    </div>
+                ))}
+            </div>
+            {/* <button 
+                onClick={isSpinning ? stopSpin : startSpin} 
+                className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            >
+                {isSpinning ? 'Stop Spin' : 'Start Spin'}
+            </button>
+            <p className="mt-4 text-xl font-bold">{message}</p> */}
+        </div>
+                </div>
+                <div className='w-60 mx-auto'>
+                    <p className='text-xs mx-auto text-center'>Select the quantity of golds</p>
+                </div>
+                <div className='w-60 mx-auto'>
+                   
+                    <div className='w-60 mx-auto'>
+                        <div className='flex justify-between gap-2 w-60'>
+                            {[100, 500, 1000, 10000].map((amount) => (
+                                <button
+                                    key={amount}
+                                    className={`h-5 w-fit p-1 flex items-center gap-1 rounded-full font-semibold text-xs border shadow-lg transition-transform transform hover:scale-100 ${selectedAmount === amount ? 'bg-yellow-500' : 'bg-gray-700 text-white'}`}
+                                    onClick={() => setSelectedAmount(amount)} // Set selected amount on button click
+                                >
+                                    <span className='text-yellow-300'>💰</span>
+                                    {amount}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className='w-60 mx-auto mt-2 text-center'>
+                    <p className='mt-2 text-white'>Winning Amount: {message}</p>
+                </div>
+            </div>
+            <Button
+                setTimer={setTimer}
+                setSelectedIndex={setSelectedIndex}
+                setWinningAmount={setWinningAmount}
+                setSelectedAmount={setSelectedAmount}
+                startSpin={startSpin}
+                stopSpin={stopSpin}
+                isSpinning={isSpinning}
+
+            />
+            <Reward />
+        </div>
+    );
+}
+
+export default GridContainer;

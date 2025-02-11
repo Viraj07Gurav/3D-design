@@ -1,38 +1,27 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const Button = ({ setTimer, setSelectedIndex, setWinningAmount, setLoopInterval, setSelectedAmount }) => {
+const Button = ({ setSelectedIndex, setWinningAmount, setSelectedAmount, startSpin, stopSpin, isSpinning,updateBalance,updateAmount }) => {
   const amounts = [100, 500, 1000, 10000]; // Define the amounts for each button
+  const [selectedAmount, setLocalSelectedAmount] = useState(100); // Local state for selected amount
 
-  const startSelection = () => {
-    const gridItems = ["Oranges", "Oranges", "Grapes", "Cherry", "null", "Watermelon", "Watermelon", "Mango", "Strawberry"]; // List of grid items
-    const loopSequence = [0, 1, 2, 3, 5, 6, 7, 8]; // Indices for grid items
+  const startRotate = (amount) => {
+    if (isSpinning) {
+      stopSpin(amount);
+    } else {
+      startSpin(amount);
+    }
+  };
 
-    setTimer(7); // Reset the timer to 7 seconds
-    setSelectedIndex(null); // Reset the selected index
-    setWinningAmount(0); // Reset winning amount
-
-    // Start the countdown timer
-    const timerInterval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(timerInterval); // Stop the timer once it reaches 0
-          setWinningAmount(gridItems[setSelectedIndex]); // Set the winning amount based on the selected index
-          return 0;
-        }
-        return prev - 1; // Decrease timer
-      });
-    }, 1000); // Countdown every 1 second
-
-    // Start the loop selection
-    let loopInterval = setInterval(() => {
-      setSelectedIndex(loopSequence[Math.floor(Math.random() * loopSequence.length)]); // Randomly select an index from the sequence
-    }, 500); // Loop speed is set to 500ms
-
-    // Stop the loop when the timer reaches 0
-    setTimeout(() => {
-      clearInterval(loopInterval); // Stop loop after 7 seconds (same duration as the timer)
-    }, 7000); // Stop loop after 7 seconds
+  const handleClick = (amount) => {
+    console.log("btn selected amount "+amount)
+    setLocalSelectedAmount(amount); // Update local selected amount
+    console.log(amount)
+    // setSelectedAmount(amount); // Sync with parent component
+    console.log(amount)
+    startRotate(amount); // Toggle spinning state
+    updateBalance(amount)
+    updateAmount(amount)
   };
 
   return (
@@ -41,13 +30,10 @@ const Button = ({ setTimer, setSelectedIndex, setWinningAmount, setLoopInterval,
         <StyledWrapper key={amount} className="flex justify-center items-center">
           <button
             className="btn-class-name"
-            onClick={() => {
-              setSelectedAmount(amount); // Set the selected amount
-              startSelection(); // Trigger selection logic on button click
-            }}
+            onClick={() => handleClick(amount)}  // On button click, update selected amount and start selection
           >
             <span className="back" />
-            <span className="front">{amount}</span>
+            <span className="front text-xs"></span>
           </button>
         </StyledWrapper>
       ))}
@@ -57,7 +43,7 @@ const Button = ({ setTimer, setSelectedIndex, setWinningAmount, setLoopInterval,
 
 const StyledWrapper = styled.div`
   .btn-class-name {
-    --primary: 255, 234, 0;
+    --primary:  220, 202, 0;
     --secondary: 223, 255, 0;
     width: 40px;
     height: 30px;
