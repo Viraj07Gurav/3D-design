@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex flex-col items-center justify-center h-full w-full max-w-md mx-auto lg:border bg-[#0D0E37]">
+      <div className="flex flex-col items-center justify-center h-full w-full max-w-md mx-auto lg:border bg-gradient-to-l from-[#040547] via-[#19026a]  to-[#0D0E35]">
       {/* bg-[#0D0E37] */}
          <div className="flex-1 w-full overflow-y-auto  pb-20 mb-[2rem] hide-scroll">    
          <Header />
