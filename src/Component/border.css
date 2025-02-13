@@ -1,0 +1,36 @@
+/* Define the custom property (variable) for border angle */
+:root {
+    --border-angle: 360 deg; /* Set the default angle for the border */
+}
+
+/* Apply the custom gradient and effects to the container */
+.custom-gradient {
+    position: relative;
+    background: 
+        linear-gradient(45deg, #8a7353, #a89f87 50%, #8a7353) padding-box, /* Main background */
+        conic-gradient(from var(--border-angle), rgba(71, 85, 105, 0.48) 80%, 
+                       #6366f1 86%, #a5b4fc 90%, #6366f1 94%, rgba(71, 85, 105, 0.48)) border-box; /* Border gradient */
+    border-radius: 1rem; /* For rounded corners */
+    border: 3px solid transparent; /* Transparent border for conic effect */
+    animation: borderAnimation 10s infinite ease-in-out; /* Animation for border angle */
+    background-clip: content-box, border-box; /* Ensure gradient only affects the border */
+}
+
+/* Example animation for the border (change this as needed) */
+@keyframes borderAnimation {
+    0% {
+        --border-angle: 0deg; /* Initial angle */
+    }
+    25%{
+        --border-angle: 90deg; /* Initial angle */
+    }
+    50% {
+        --border-angle: 180deg; /* Change angle midway */
+    }
+    75%{
+        --border-angle: 270deg; /* Initial angle */
+    }
+    100% {
+        --border-angle: 360deg; /* End angle */
+    }
+}

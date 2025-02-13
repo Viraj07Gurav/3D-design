@@ -1,1 +1,19 @@
 @import "tailwindcss";
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Half content moves left */
+  }
+  
+  .scroll-container {
+    display: flex;
+    overflow: hidden;
+    width: 100%; /* Ensures scrolling happens inside this div */
+  }
+  
+  .scroll-content {
+    display: flex;
+    white-space: nowrap;
+    animation: scroll 5s linear infinite;
+    width: max-content; /* Ensures scrolling happens smoothly */
+  }
+  

@@ -1,21 +1,23 @@
-import React from 'react'
+import React from "react";
 
 function Footer() {
-    const fruits = ["🍇", "🍏", "🍊", "🍒", "🍋", "🍉", "🍇"];
+  const fruits = ["🍇", "🍏", "🍊", "🍒", "🍋", "🍉", "🍇"];
+
   return (
-    // bg-gradient-to-b from-brown-800 to-brown-600
-    <div className="bg-[#673f1c] p-4  shadow-lg flex items-center gap-1">
+    <div className="bg-[#673f1c] p-4 shadow-lg overflow-hidden w-full flex">
       <span className="text-yellow-300 font-semibold">Results:</span>
-      {fruits.map((fruit, index) => (
-        <span key={index} className="text-3xl">
-          {fruit}
-        </span>
-      ))}
-      {/* <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-lg">
-        NEW
-      </span> */}
+      <div className="scroll-container">
+        <div className="scroll-content">
+          {fruits.map((fruit, index) => (
+            <span key={index} className="text-xl px-2">{fruit}</span>
+          ))}
+          {fruits.map((fruit, index) => (
+            <span key={index + fruits.length} className="text-xl px-2 ">{fruit}</span>
+          ))}
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

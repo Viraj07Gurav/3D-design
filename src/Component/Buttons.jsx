@@ -40,7 +40,7 @@ const Button = ({ setTimer, setSelectedIndex, setWinningAmount, setLoopInterval,
       {amounts.map((amount) => (
         <StyledWrapper key={amount} className="flex justify-center items-center">
           <button
-            className="btn-class-name"
+            className="btn-class-name border-2" 
             onClick={() => {
               setSelectedAmount(amount); // Set the selected amount
               startSelection(); // Trigger selection logic on button click

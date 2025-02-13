@@ -13,14 +13,16 @@ import Reward from './Reward';
 import UsernameModal from './UsernameModal';
 import audio from "../assets/sound.mp3"
 import win from "../assets/win.mp3"
+import './border.css';
 const fruits = ["🍇", "🍏", "🍒"]; // Ensure there are enough fruits
 
 function GridContainer() {
+
     const [selectedAmount, setSelectedAmount] = useState(null); // Stores the selected amount
     const [timer, setTimer] = useState(10); // Initial timer value is 10 seconds
     const [selectedIndex, setSelectedIndex] = useState(null); // Stores the currently selected index
     const [winningAmount, setWinningAmount] = useState(0); // Stores the winning amount
-    const [balance, setBalance] = useState(10000); // Initial balance
+    const [balance, setBalance] = useState(0); // Initial balance
     const [spinStarted, setSpinStarted] = useState(false);
 
 
@@ -111,6 +113,7 @@ function GridContainer() {
         timeoutRef.current = setTimeout(() => {
             stopSpin(); // Automatically stop after 10 seconds
             setMessage('Try again ..! ❌');
+            
         }, 10000); // 10-second timer
 
         timerIntervalRef.current = setInterval(() => {
@@ -157,9 +160,12 @@ function GridContainer() {
 
     const checkWin = () => {
         // Check if all the middle fruits of the 3 columns are the same
+        console.log(winningAmount);
         if (slots[0][1] === slots[1][1] && slots[1][1] === slots[2][1]) {
-            const winAmount = selectedAmount * 2; // Example winning calculation
-            setWinningAmount(winAmount);
+            const winAmount =selectedAmount +selectedAmount; // Example winning calculation
+            console.log("win amount",winAmount)
+            setWinningAmount(winningAmount+winAmount);
+           
             // setBalance((prevBalance) => prevBalance + winAmount);
             setMessage(`You won ${winAmount}!`);
             if (winAudioRef.current) {
@@ -193,28 +199,42 @@ function GridContainer() {
                     setMessage('Try next time!');
                     return prevBalance; // Do not update the balance if it goes below 0
                 }
+                localStorage.setItem('userAmount', newBalance);
                 return newBalance;
             });
         }
     };
 
     const [username, setUsername] = useState(null);
+    const [amount, setUserAmount] = useState(null);
     const [showModal, setShowModal] = useState(false);
+   
   
     // Check if username is already stored in localStorage when app loads
     useEffect(() => {
       const storedUsername = localStorage.getItem('username');
-      if (!storedUsername) {
+       const userAmount = localStorage.getItem('userAmount');
+
+
+      if ((!storedUsername)) {
         setShowModal(true); // Show the modal if username doesn't exist
       } else {
-        setUsername(storedUsername); // Set the username if it exists in localStorage
+        setUserAmount(userAmount); // Set the username if it exists in localStorage
+        setUsername(storedUsername);
+        setBalance(userAmount);
       }
     }, []);
+
+    useEffect(() => {
+        const amount = localStorage.getItem('userAmount');
+        
+      }, []);
   
     // Function to handle username input from the modal
-    const handleUsernameSubmit = (name) => {
+    const handleUsernameSubmit = (name,amount) => {
       setUsername(name);
-      localStorage.setItem('username', name); // Save the username in localStorage
+      localStorage.setItem('username', name);
+      localStorage.setItem('userAmount', amount); // Save the username in localStorage
       setShowModal(false); // Close the modal after username is submitted
       window.location.reload();
     };
@@ -230,7 +250,7 @@ function GridContainer() {
                     <p className='text-yellow-500'>Lottery Time : <span className=''>{timer}s</span></p> {/* Display the remaining time */}
                     <div className='h-4 w-4 rounded-full border ' style={{ background: 'linear-gradient(gray 35%, white 50%, gray 35%)' }}></div>
                 </div>
-                <div className='rounded-xl w-60 mx-auto mt-2 bg-[#8a7353] shadow-[0px_0px_15px_rgba(0,0,0,0.3)]'>
+                <div className='rounded-xl w-60 mx-auto mt-2 bg-[#8a7353] shadow-[0px_0px_15px_rgba(0,0,0,0.3)] border border-transparent animate-border custom-gradient'>
                     <div className="p-5 w-60 text-center">
                         <div className="flex justify-center gap-2 p-2 rounded-md">
                             {slots.map((column, index) => (

@@ -33,7 +33,7 @@ const Button = ({ setSelectedIndex, setWinningAmount, setSelectedAmount, startSp
 
   return (
     <div>
-      <div className="w-90 h-15 bg-gradient-to-b from-[#2d2e28] to-[#a19388] mx-auto grid grid-cols-4 p-2 px-5 border-b-4 border-b-amber-200" style={{ clipPath: "polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)" }}>
+      <div className="w-90 h-15   bg-gradient-to-b from-[#2d2e28] to-[#a19388] mx-auto grid grid-cols-4 p-2 px-5 border-b-3 border-b-amber-200" style={{ clipPath: "polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)" }}>
         {amounts.map((amount) => (
           <StyledWrapper key={amount} className="flex justify-center items-center">
             <button
@@ -41,8 +41,8 @@ const Button = ({ setSelectedIndex, setWinningAmount, setSelectedAmount, startSp
               onClick={() => handleClick(amount)}  // On button click, update selected amount and start selection
               disabled={disabledButton && disabledButton !== amount}  // Disable all buttons except the clicked one
             >
-              <span className="back" />
-              <span className="front text-xs">{amount}</span>
+              <span className="back animate-pulse" />
+              <span className="front text-xs ">{amount}</span>
             </button>
           </StyledWrapper>
         ))}
